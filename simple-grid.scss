@@ -1,0 +1,18 @@
+@use "sass:list";
+@use "sass:map";
+@use "./src/variables";
+@use "./src/mixins";
+
+//container
+.container {
+    @include mixins.make-container();
+}
+
+// Row
+.row {
+    @include mixins.make-row();
+}
+
+//columns
+@include mixins.make-grid-columns();
+
