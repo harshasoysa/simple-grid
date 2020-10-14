@@ -1,12 +1,12 @@
 @use "sass:list";
 @use "sass:map";
-@import "./variables";
+@use "./variables";
 
-@mixin make-container($max-width: $max-container-width) {
+@mixin make-container($max-width: variables.$max-container-width) {
     width: 100%;
     margin-right: auto;
     margin-left: auto;
-    max-width: $max-container-width;
+    max-width: $max-width;
 }
 
 @mixin make-row() {
@@ -15,8 +15,8 @@
 }
 
 @mixin make-grid-columns(
-    $columns: $grid-columns,
-    $breakpoints: $grid-breakpoints
+    $columns: variables.$grid-columns,
+    $breakpoints: variables.$grid-breakpoints
 ) {
     @each $breakpoint in map-keys($breakpoints) {
         $infix: breakpoint-infix($breakpoint, $breakpoints);
@@ -40,7 +40,7 @@
     }
 }
 
-@mixin make-col($size, $columns: $grid-columns) {
+@mixin make-col($size, $columns: variables.$grid-columns) {
     -ms-flex: 0 0 percentage($size / $columns);
     flex: 0 0 percentage($size / $columns);
 
@@ -52,7 +52,7 @@
 
 @function breakpoint-next(
     $name,
-    $breakpoints: $grid-breakpoints,
+    $breakpoints: variables.$grid-breakpoints,
     $breakpoint-names: map-keys($breakpoints)
 ) {
     $n: index($breakpoint-names, $name);
@@ -67,7 +67,7 @@
 //
 //    >> breakpoint-min(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
 //    576px
-@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+@function breakpoint-min($name, $breakpoints: variables.$grid-breakpoints) {
     $min: map-get($breakpoints, $name);
     @return if($min != 0, $min, null);
 }
@@ -81,7 +81,7 @@
 //
 //    >> breakpoint-max(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
 //    767.98px
-@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+@function breakpoint-max($name, $breakpoints: variables.$grid-breakpoints) {
     $next: breakpoint-next($name, $breakpoints);
     @return if($next, breakpoint-min($next, $breakpoints) - 0.02, null);
 }
@@ -93,13 +93,13 @@
 //    ""  (Returns a blank string)
 //    >> breakpoint-infix(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
 //    "-sm"
-@function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
+@function breakpoint-infix($name, $breakpoints: variables.$grid-breakpoints) {
     @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
 }
 
 // Media of at least the minimum breakpoint width. No query for the smallest breakpoint.
 // Makes the @content apply to the given breakpoint and wider.
-@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+@mixin media-breakpoint-up($name, $breakpoints: variables.$grid-breakpoints) {
     $min: breakpoint-min($name, $breakpoints);
     @if $min {
         @media (min-width: $min) {
@@ -112,7 +112,7 @@
 
 // Media of at most the maximum breakpoint width. No query for the largest breakpoint.
 // Makes the @content apply to the given breakpoint and narrower.
-@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+@mixin media-breakpoint-down($name, $breakpoints: variables.$grid-breakpoints) {
     $max: breakpoint-max($name, $breakpoints);
     @if $max {
         @media (max-width: $max) {
