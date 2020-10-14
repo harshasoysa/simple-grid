@@ -1,1 +1,3 @@
-# simple-grid
+# Simple-grid
+
+Simple sass grid layout
